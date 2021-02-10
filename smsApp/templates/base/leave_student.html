@@ -1,0 +1,89 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block page_content %}
+<!-- Header -->
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="#">{{ page_tittle }}</a></li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- Page content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col">
+              <div class="card">
+                <!-- Card header -->
+                <div class="card-header border-0">
+                  <h3 class="mb-0">{{ page_tittle }}</h3>
+                </div>
+                <!-- Light table -->
+                <div class="table-responsive">
+                  <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Student ID</th>
+                        <th scope="col">Student name</th>
+                        <th scope="col">Leave date</th>
+                        <th scope="col">Leave message</th>
+                        <th scope="col">Applied on</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody class="list">
+                      {% for leave in leaves %}
+                      <tr>
+                        <td>{{ leave.id }}</td>
+                        <td>{{ leave.student_id.admin.id }}</td>
+                        <td>{{ leave.student_id.admin.first_name }} {{ leave.student_id.admin.last_name }}</td>
+                        <td>{{ leave.leave_date }}</td>
+                        <td>{{ leave.leave_message }}</td>
+                        <td>{{ leave.created_at }}</td>
+                        <td class="badge badge-dot">
+                            {% if leave.leave_status == 0 %}
+                                <div class="row">
+                                    <a href="{% url 'admin_leave_student_approve' leave_id=leave.id %}" class="mr-2"><button class="col btn btn-success text-white">Approve</button></a>
+                                    <a href="{% url 'admin_leave_student_reject' leave_id=leave.id %}" class="mr-2"><button class="col btn btn-danger text-white">Reject</button></a>
+                                </div>
+                            {% elif leave.leave_status == 1 %}
+                                <i class="bg-success"></i>
+                                <span class="status">Approved</span>
+                            {% elif leave.leave_status == 3 %}
+                                <i class="bg-danger"></i>
+                                <span class="status">Rejected</span>
+                            {% endif %}
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <!-- Card footer -->
+                <div class="card-footer py-4">
+                  <nav aria-label="...">
+                    <ul class="pagination justify-content-end mb-0">
+                      {% for page_index in page %}
+                        <li class="page-item">
+                            <a href="{% url 'admin_leave_student' %}?page={{ page_index }}" id="page_index" class="page-link">{{ page_index }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+    </div>
+</div>
+{% endblock page_content %}

@@ -1,0 +1,95 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block page_content %}
+<!-- Header -->
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="#">{{ page_tittle }}</a></li>
+                </ol>
+              </nav>
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="{% url 'admin_add_student' %}"><i class="fas fa-plus mr-2"></i>Add student</a></li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- Page content -->
+<div class="container-fluid mt--6">
+        <div class="col">
+          <div class="card">
+            <!-- Card header -->
+            <div class="card-header border-0">
+              <h3 class="mb-0">{{ page_tittle }}</h3>
+            </div>
+            <!-- Light table -->
+            <div class="table-responsive">
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Profile picture</th>
+                    <th scope="col">First name</th>
+                    <th scope="col">Last name</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Course</th>
+                    <th scope="col">Session year</th>
+                    <th scope="col">Last login</th>
+                    <th scope="col">Date joined</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="list">
+                  {% for student in students %}
+                  <tr>
+                    <td>{{ student.admin.id }}</td>
+                    <td><img class="avatar avatar-lg" src="{{ student.profile_picture }}"></td>
+                    <td>{{ student.admin.first_name }}</td>
+                    <td>{{ student.admin.last_name }}</td>
+                    <td>{{ student.gender }}</td>
+                    <td>{{ student.admin.username }}</td>
+                    <td>{{ student.admin.email }}</td>
+                    <td>{{ student.address }}</td>
+                    <td>{{ student.course_id.course_name }}</td>
+                    <td>{{ student.session_year_id.session_start_year }} - {{ student.session_year_id.session_end_year }}</td>
+                    <td>{{ student.admin.last_login }}</td>
+                    <td>{{ student.admin.date_joined }}</td>
+                    <td>
+                        <div class="row">
+                            <a href="/admin_edit_student/{{ student.admin.id }}" class="col btn btn-success text-white">Edit</a>
+                        </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- Card footer -->
+            <div class="card-footer py-4">
+              <nav aria-label="...">
+                <ul class="pagination justify-content-end mb-0">
+                      {% for page_index in page %}
+                        <li class="page-item">
+                            <a href="{% url 'admin_manage_student' %}?page={{ page_index }}" id="page_index" class="page-link">{{ page_index }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+</div>
+{% endblock page_content %}

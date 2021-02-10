@@ -1,0 +1,75 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block page_content %}
+<!-- Header -->
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="#">{{ page_tittle }}</a></li>
+                </ol>
+              </nav>
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="{% url 'admin_add_course' %}"><i class="fas fa-plus mr-2"></i>Add course</a></li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- Page content -->
+<div class="container-fluid mt--6">
+        <div class="col">
+          <div class="card">
+            <!-- Card header -->
+            <div class="card-header border-0">
+              <h3 class="mb-0">{{ page_tittle }}</h3>
+            </div>
+            <!-- Light table -->
+            <div class="table-responsive">
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Course name</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="list">
+                  {% for course in courses %}
+                  <tr>
+                    <td>{{ course.id }}</td>
+                    <td>{{ course.course_name }}</td>
+                    <td>
+                        <div class="row">
+                            <a href="/admin_edit_course/{{ course.id }}" class="col btn btn-success text-white">Edit</a>
+                        </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- Card footer -->
+            <div class="card-footer py-4">
+              <nav aria-label="...">
+                <ul class="pagination justify-content-end mb-0">
+                      {% for page_index in page %}
+                        <li class="page-item">
+                            <a href="{% url 'admin_manage_course' %}?page={{ page_index }}" id="page_index" class="page-link">{{ page_index }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+</div>
+{% endblock page_content %}

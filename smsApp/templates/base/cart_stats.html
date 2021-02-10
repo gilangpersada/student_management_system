@@ -1,0 +1,96 @@
+{% load static %}
+<!-- Card stats -->
+          <div class="row">
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h6 class="card-title text-uppercase text-muted mb-0">Total student</h6>
+                      <span class="h2 font-weight-bold mb-0">{{ student_count }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                        <i class="ni ni-hat-3"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="mb-1 mt-3">
+                  <a href="{% url 'admin_manage_student' %}"><p class="mt-3 mb-0 text-sm">
+                    <span class="text-nowrap">More info</span>
+                    <span class="text-red"><i class="fa fa-arrow-alt-circle-right"></i></span>
+                  </p></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h6 class="card-title text-uppercase text-muted mb-0">Total staff</h6>
+                      <span class="h2 font-weight-bold mb-0">{{ staff_count }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                        <i class="ni ni-briefcase-24"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="mb-1 mt-3">
+                  <a href="{% url 'admin_manage_staff' %}"><p class="mt-3 mb-0 text-sm">
+                    <span class="text-nowrap">More info</span>
+                    <span class="text-orange"><i class="fa fa-arrow-alt-circle-right"></i></span>
+                  </p></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h6 class="card-title text-uppercase text-muted mb-0">Total course</h6>
+                      <span class="h2 font-weight-bold mb-0">{{ course_count }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                        <i class="ni ni-book-bookmark"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="mb-1 mt-3">
+                  <a href="{% url 'admin_manage_course' %}"><p class="mt-3 mb-0 text-sm">
+                    <span class="text-nowrap">More info</span>
+                    <span class="text-green"><i class="fa fa-arrow-alt-circle-right"></i></span>
+                  </p></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h6 class="card-title text-uppercase text-muted mb-0">Total subject</h6>
+                      <span class="h2 font-weight-bold mb-0">{{ subject_count }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                        <i class="ni ni-paper-diploma"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="mb-1 mt-3">
+                  <a href="{% url 'admin_manage_subject' %}"><p class="mt-3 mb-0 text-sm">
+                    <span class="text-nowrap">More info</span>
+                    <span class="text-info"><i class="fa fa-arrow-alt-circle-right"></i></span>
+                  </p></a>
+                </div>
+              </div>
+            </div>
+          </div>

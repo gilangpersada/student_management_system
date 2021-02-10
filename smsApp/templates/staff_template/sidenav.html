@@ -1,0 +1,62 @@
+{% load static %}
+<!-- Sidenav -->
+  <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+    <div class="scrollbar-inner">
+      <!-- Brand -->
+      <div class="sidenav-header  align-items-center">
+        <a class="navbar-brand" href="javascript:void(0)">
+          <h2 class="navbar-brand-img text-primary" alt="..."><b>SMS</b></h2>
+        </a>
+      </div>
+      <div class="navbar-inner">
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+          <!-- Nav items -->
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              {% url 'staff_dashboard' as staff_dashboard %}
+              <a class="nav-link {% if request.path == staff_dashboard %} active {% endif %}" href="{{ staff_dashboard }}">
+                <i class="ni ni-tv-2 text-primary"></i>
+                <span class="nav-link-text">Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              {% url 'staff_take_attendance' as staff_take_attendance %}
+              <a class="nav-link {% if request.path == staff_take_attendance %} active {% endif %}" href="{{ staff_take_attendance }}">
+                <i class="ni ni-button-play text-green"></i>
+                <span class="nav-link-text">Take attendance</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              {% url 'staff_update_attendance_data' as staff_update_attendance_data %}
+              <a class="nav-link {% if request.path == staff_update_attendance_data %} active {% endif %}" href="{{ staff_update_attendance_data }}">
+                <i class="ni ni-button-play text-blue"></i>
+                <span class="nav-link-text">Update attendance</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              {% url 'staff_add_result' as staff_add_result %}
+              <a class="nav-link {% if request.path == staff_add_result %} active {% endif %}" href="{{ staff_add_result }}">
+                <i class="ni ni-ruler-pencil text-black-50"></i>
+                <span class="nav-link-text">Add result</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              {% url 'staff_feedback' as staff_feedback %}
+              <a class="nav-link {% if request.path == staff_feedback %} active {% endif %}" href="{{ staff_feedback }}">
+                <i class="ni ni-book-bookmark text-yellow"></i>
+                <span class="nav-link-text">Feedback</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              {% url 'staff_apply_leave' as staff_apply_leave %}
+              <a class="nav-link {% if request.path == staff_apply_leave %} active {% endif %}" href="{{ staff_apply_leave }}">
+                <i class="ni ni-delivery-fast text-red"></i>
+                <span class="nav-link-text">Apply for leave</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>

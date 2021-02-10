@@ -1,0 +1,96 @@
+{% load static %}
+<!-- Card stats -->
+          <div class="row">
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h6 class="card-title text-uppercase text-muted mb-0">Total attendance</h6>
+                      <span class="h2 font-weight-bold mb-0">{{ attendance_total }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                        <i class="ni ni-button-play"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="mb-1 mt-3">
+                  <a href=""><p class="mt-3 mb-0 text-sm">
+                    <span class="text-nowrap">More info</span>
+                    <span class="text-red"><i class="fa fa-arrow-alt-circle-right"></i></span>
+                  </p></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h6 class="card-title text-uppercase text-muted mb-0">Total present</h6>
+                      <span class="h2 font-weight-bold mb-0">{{ attendance_present }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                        <i class="ni ni-ruler-pencil"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="mb-1 mt-3">
+                  <a href=""><p class="mt-3 mb-0 text-sm">
+                    <span class="text-nowrap">More info</span>
+                    <span class="text-orange"><i class="fa fa-arrow-alt-circle-right"></i></span>
+                  </p></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h6 class="card-title text-uppercase text-muted mb-0">Total absent</h6>
+                      <span class="h2 font-weight-bold mb-0">{{ attendance_absent }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                        <i class="ni ni-user-run"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="mb-1 mt-3">
+                  <a href=""><p class="mt-3 mb-0 text-sm">
+                    <span class="text-nowrap">More info</span>
+                    <span class="text-green"><i class="fa fa-arrow-alt-circle-right"></i></span>
+                  </p></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h6 class="card-title text-uppercase text-muted mb-0">Total subject</h6>
+                      <span class="h2 font-weight-bold mb-0">{{ subjects }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                        <i class="ni ni-paper-diploma"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="mb-1 mt-3">
+                  <a href=""><p class="mt-3 mb-0 text-sm">
+                    <span class="text-nowrap">More info</span>
+                    <span class="text-info"><i class="fa fa-arrow-alt-circle-right"></i></span>
+                  </p></a>
+                </div>
+              </div>
+            </div>
+          </div>

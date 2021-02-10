@@ -1,0 +1,171 @@
+{% extends 'staff_template/base.html' %}
+{% load static %}
+{% block page_content %}
+<!-- Header -->
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="#">{{ page_tittle }}</a></li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+          <!-- Cart stat -->
+          {% include 'staff_template/cart_stats.html' %}
+        </div>
+      </div>
+    </div>
+
+<!-- Page content -->
+    <div class="container-fluid mt--6">
+      <div class="row">
+
+        <div class="col-xl-6">
+          <div class="card bg-default">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h6 class="text-light text-uppercase ls-1 mb-1">Attendance information</h6>
+                  <h5 class="h3 text-white mb-0">Attendance</h5>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Chart -->
+              <div class="chart">
+                <!-- Chart wrapper -->
+                  <canvas id="pieChart" class="chart-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-6">
+          <div class="card bg-default">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h6 class="text-light text-uppercase ls-1 mb-1">Attendance statistic</h6>
+                  <h5 class="h3 text-white mb-0">Attendance</h5>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Chart -->
+              <div class="chart">
+                <canvas id="barChart" class="chart-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card bg-default">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h6 class="text-light text-uppercase ls-1 mb-1">Student attendance statistic</h6>
+                  <h5 class="h3 text-white mb-0">Student attendance</h5>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Chart -->
+              <div class="chart">
+                <canvas id="barChart2" class="chart-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock page_content %}
+{% block custom_js %}
+<script>
+$(document).ready(function(){
+    var pie_chart = document.getElementById("pieChart").getContext('2d');
+    var myPieChart = new Chart(pie_chart, {
+      type: 'pie',
+      data: {
+        labels: ["Attend class", "Leave taken"],
+        datasets: [{
+          data: [{{ attendance_count }}, {{ leave_count }}],
+          backgroundColor: ["#46BFBD", "#F7464A"],
+          hoverBackgroundColor: ["#5AD3D1", "#FF5A5E"]
+        }]
+      },
+      options: {
+          responsive: true,
+      }
+    });
+
+    var subjects = {{ subject_list|safe }};
+    var attendances = {{ attendance_list }};
+    var areaChartData = {
+        labels: subjects,
+        datasets: [{
+            label: 'Attend taken',
+            data: attendances,
+            pointRadius: false,
+            backgroundColor: '#46BFBD'
+        }]
+    };
+    var bar_chart_canvas = document.getElementById("barChart").getContext('2d');
+    var bar_chart_data = jQuery.extend(true, {}, areaChartData);
+    var temp0 = areaChartData.datasets[0];
+    bar_chart_data.datasets[0] = temp0;
+
+    var bar_chart_option = {
+        responsive: true,
+        datasetFill: false
+    };
+
+    var barChart = new Chart(bar_chart_canvas, {
+        type: 'bar',
+        data: bar_chart_data,
+        options: bar_chart_option
+    });
+
+    {# barchart 2#}
+    var student_list = {{ student_list|safe }};
+    var present_list = {{ present_list }};
+    var absent_list = {{ absent_list }};
+    var areaChartData2 = {
+        labels: student_list,
+        datasets: [{
+            label: 'Present',
+            data: present_list,
+            pointRadius: false,
+            backgroundColor: '#46BFBD'
+        },{
+            label: 'Absent',
+            data: absent_list,
+            pointRadius: false,
+            backgroundColor: '#F7464A'
+        }]
+    };
+    var bar_chart_canvas2 = document.getElementById("barChart2").getContext('2d');
+    var bar_chart_data2 = jQuery.extend(true, {}, areaChartData2);
+    var temp1 = areaChartData2.datasets[0];
+    bar_chart_data2.datasets[0] = temp1;
+
+    var bar_chart_option2 = {
+        responsive: true,
+        datasetFill: false
+    };
+
+    var barChart2 = new Chart(bar_chart_canvas2, {
+        type: 'bar',
+        data: bar_chart_data2,
+        options: bar_chart_option2
+    });
+
+})
+</script>
+{% endblock custom_js %}

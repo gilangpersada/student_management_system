@@ -1,0 +1,139 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block page_content %}
+<!-- Header -->
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="#">{{ page_tittle }}</a></li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- Page content -->
+<div class="container-fluid mt--6">
+        <div class="col-xl-8">
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">{{ page_tittle }} </h3>
+                  {% if messages %}
+                    <div class="col-8">
+                        {% for message in messages %}
+                        {% if message.tags == 'error'%}
+                        <span class="text-red mb-0"><small>{{ message }}</small></span>
+                        {% endif %}
+                        {% if message.tags == 'success'%}
+                        <span class="text-green mb-0"><small>{{ message }}</small></span>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <form action="{% url 'admin_edit_student_save' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h6 class="heading-small text-muted mb-4">Student information</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Username</label>
+                        <input type="text" class="form-control" placeholder="username" name="username" value="{{ student.admin.username }}">
+                        <input type="hidden" name="student_id" value="{{ student.admin.id }}">
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="my-4">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label">First name</label>
+                        <input type="text" class="form-control" placeholder="First name" name="first_name" value="{{ student.admin.first_name }}">
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Email</label>
+                        <input type="email" class="form-control" placeholder="gilang@gmail.com" name="email" value="{{ student.admin.email }}">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Last name</label>
+                        <input type="text" class="form-control" placeholder="Last name" name="last_name" value="{{ student.admin.last_name }}">
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Address</label>
+                        <input type="text" class="form-control" placeholder="Address" name="address" value="{{ student.address }}">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Gender</label>
+                          <select class="form-control" name="gender">
+                              <option class="form-control" value="Male" {% if student.gender == "Male" %} selected {% endif %}>Male</option>
+                              <option class="form-control" value="Female" {% if student.gender == "Female" %} selected {% endif %}>Female</option>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Profile picture</label>
+                          <input type="file" class="form-control" placeholder="Upload picture" name="profile_picture">
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="my-4">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Session year</label>
+                          <select class="form-control" name="session">
+                              {% for session in sessions %}
+                                  <option class="form-control" value="{{ session.id }} {% if session_id == student.session_year_id.id %} selected {% endif %}">{{ session.session_start_year }} - {{ session.session_end_year }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label">Course</label>
+                          <select class="form-control" name="course">
+                              {% for course in courses %}
+                                  <option class="form-control" value="{{ course.id }}" {% if course_id == student.course_id.id %} selected {% endif %}>{{ course.course_name }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="text-left">
+                      <button type="submit" class="btn btn-primary text-white">{{ page_tittle }}</button>
+                  </div>
+              </form>
+            </div>
+          </div>
+        </div>
+</div>
+{% endblock page_content %}

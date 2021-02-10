@@ -1,0 +1,208 @@
+{% extends 'staff_template/base.html' %}
+{% load static %}
+{% block page_content %}
+<!-- Header -->
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="{% url 'staff_dashboard' %}"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="#">{{ page_tittle }}</a></li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- Page content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-xl-6 order-xl-1">
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">{{ page_tittle }} </h3>
+                  {% if messages %}
+                    <div class="col-8">
+                        {% for message in messages %}
+                        {% if message.tags == 'error'%}
+                        <span class="text-red mb-0"><small>{{ message }}</small></span>
+                        {% endif %}
+                        {% if message.tags == 'success'%}
+                        <span class="text-green mb-0"><small>{{ message }}</small></span>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                <h6 class="heading-small text-muted mb-4">Take attendance information</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-8">
+                      <div class="form-group">
+                        <label class="form-control-label">Subject</label>
+                          <select class="form-control" name="subject" id="subject">
+                              {% for subject in subjects %}
+                                  <option class="form-control" value="{{ subject.id }}">{{ subject.subject_name }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-8">
+                      <div class="form-group">
+                        <label class="form-control-label">Session year</label>
+                          <select class="form-control" name="session_year" id="session_year">
+                              {% for session_year in session_years %}
+                                  <option class="form-control" value="{{ session_year.id }}">{{ session_year.session_start_year }} - {{ session_year.session_end_year }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="text-left">
+                      <button type="submit" class="btn btn-primary text-white" id="filter_student">Filter student</button>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-6 order-xl-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Data student </h3>
+                  {% if messages %}
+                    <div class="col-8">
+                        {% for message in messages %}
+                        {% if message.tags == 'error'%}
+                        <span class="text-red mb-0"><small>{{ message }}</small></span>
+                        {% endif %}
+                        {% if message.tags == 'success'%}
+                        <span class="text-green mb-0"><small>{{ message }}</small></span>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                <div class="pl-lg-4">
+                  <div id="student_data">
+
+                  </div>
+                  <br>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock page_content %}
+{% block custom_js %}
+<script>
+    $(document).ready(function(){
+        $('#filter_student').click(function(){
+            var subject = $('#subject').val()
+            var session_year = $('#session_year').val()
+
+            $.ajax({
+                url:'{% url 'staff_get_students' %}',
+                type:'POST',
+                data:{
+                    subject:subject,
+                    session_year:session_year
+                },
+            })
+            .done(function (response){
+                if(response == 'error'){
+                    alert('Student does not exist!')
+                }
+                else{
+                    var json_data = JSON.parse(response);
+                    var div_data = '<div class="col-lg-8"><div class="form-group">' +
+                        '<label class="form-control-label">Attendance date</label>' +
+                        '<input type="date" name="attendance_date" class="form-control" id="attendance_date"></div>' +
+                        '</div><div class="col"><div class="form-group">';
+                    console.log(response)
+                    for(key in json_data){
+                        div_data +=
+                            '<div class="col">' +
+                            '<div class="form-check">' +
+                            '<input type="checkbox" checked="checked" ' +
+                            'name="student_data[]" class="form-check-input" value="'+json_data[key]['id']+'">'+
+                            '<label class="form-check-label"><b>'+json_data[key]['name']+'</b></label><hr class="my-1">'+
+                            '</div>'+
+                            '</div>';
+                    }
+                    div_data += '</div></div>';
+                    div_data += '<div class="text-left">';
+                    div_data += '<button id="save_attendance" class="btn btn-primary" type="button">Save attendance</button';
+                    div_data += '</div>';
+                    $('#student_data').html(div_data);
+                }
+
+            })
+            .fail(function (){
+                alert('Error filter student')
+            })
+
+            $(document).on('click', '#save_attendance', function(){
+                $(this).attr('disabled', 'disabled')
+                $(this).text('Attendance data saved!')
+                var student_data = $("input[name='student_data[]']").map(function (response) {
+                    console.log('student_data'+ response)
+                    if ($(this).is(':checked')){
+                        return {'id':$(this).val(), 'status':1};
+                    }
+                    else{
+                        return {'id':$(this).val(), 'status':0};
+                    }
+                }).get()
+                var attendance_date = $('#attendance_date').val()
+                var subject_id = $('#subject').val()
+                var session_year_id = $('#session_year').val()
+                student_data = JSON.stringify(student_data)
+                console.log(attendance_date)
+
+                $.ajax({
+                    url:'{% url 'staff_attendance_data_save' %}',
+                    type:'POST',
+                    data:{
+                        students_id:student_data,
+                        attendance_date:attendance_date,
+                        subject_id:subject_id,
+                        session_year_id:session_year_id
+                    },
+                    })
+                    .done(function (response) {
+                        if(response == 'ok'){
+                            alert('Attendance saved!')
+                        }
+                        else{
+                            alert('Attendance failed to save!')
+                        }
+                        window.location.reload()
+                    })
+                    .fail(function (){
+                        alert('Error saving student!')
+                    })
+            })
+        })
+    })
+</script>
+{% endblock custom_js %}

@@ -1,0 +1,199 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block page_content %}
+<!-- Header -->
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="#">{{ page_tittle }}</a></li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- Page content -->
+<div class="container-fluid mt--6">
+    <div class="row">
+        <div class="col-xl-6 order-xl-1">
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">{{ page_tittle }} </h3>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                <h6 class="heading-small text-muted mb-4">View attendance information</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-8">
+                      <div class="form-group">
+                        <label class="form-control-label">Subject</label>
+                          <select class="form-control" name="subject" id="subject">
+                              {% for subject in subjects %}
+                                  <option class="form-control" value="{{ subject.id }}">{{ subject.subject_name }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-8">
+                      <div class="form-group">
+                        <label class="form-control-label">Session year</label>
+                          <select class="form-control" name="session_year_id" id="session_year_id">
+                              {% for session_year in session_year_id %}
+                                  <option class="form-control" value="{{ session_year.id }}">{{ session_year.session_start_year }} - {{ session_year.session_end_year }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-8">
+                      <div class="text-left">
+                        <button type="submit" class="btn btn-primary text-white" id="filter_attendance">Filter attendance date</button>
+                        <div id="error_attendance">
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row" id="attendance_date_row" style="display:none">
+                    <div class="col-lg-8">
+                      <div class="form-group">
+                        <label class="form-control-label">Attendance date</label>
+                          <select class="form-control" name="attendance_date" id="attendance_date">
+
+                          </select>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="text-left">
+                      <button type="submit" class="btn btn-primary text-white" id="filter_student" style="display: none">Filter student</button>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-6 order-xl-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Data student</h3>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+                <div class="pl-lg-4">
+                  <div id="student_data">
+
+                  </div>
+                  <br>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock page_content %}
+{% block custom_js %}
+<script>
+    $(document).ready(function(){
+
+        $('#filter_attendance').click(function() {
+            var subject_id = $('#subject').val()
+            var session_year_id = $('#session_year_id').val()
+
+            $.ajax({
+                    url:'{% url 'admin_get_attendance_dates' %}',
+                    type:'POST',
+                    data:{
+                        subject_id:subject_id,
+                        session_year_id:session_year_id
+                    },
+                    })
+                    .done(function (response) {
+                        var json_data = JSON.parse(response);
+                        if(json_data.length>0) {
+                            var html_data = '';
+                            console.log(response)
+                            for (key in json_data) {
+                                html_data += '<option value="' + json_data[key]['id'] + '">' + json_data[key]['attendance_date'] + '</option>'
+                            }
+                            $('#error_attendance').html('');
+                            $('#error_attendance').hide();
+                            $('#attendance_date_row').show();
+                            $('#attendance_date').html(html_data);
+                            $('#filter_student').show();
+                        } else{
+                            html_data = '<br> <span class="text-red mb-0"><small>Attendance date not found!</small></span>';
+                            $('#error_attendance').html(html_data);
+                            $('#error_attendance').show();
+                            $('#attendance_date').html("");
+                            $('#attendance_date_row').hide();
+                            $('#filter_student').hide();
+                        }
+                    })
+                    .fail(function (){
+                        alert('Error filtering attendance date!')
+                    })
+        })
+
+        $('#filter_student').click(function(){
+            var attendance_date = $('#attendance_date').val()
+
+            $.ajax({
+                url:'{% url 'admin_get_attendance_students' %}',
+                type:'POST',
+                data:{
+                    attendance_date:attendance_date
+                },
+            })
+            .done(function (response){
+                if(response == 'error'){
+                    alert('Student does not exist!')
+                }
+                else{
+                    var json_data = JSON.parse(response);
+                    var div_data = '<div class="col-lg-8"><label class="form-control-label">Student attendance</label></div><div class="col-lg-8"><div class="form-group">';
+                    console.log(response)
+                    for(key in json_data){
+                        div_data +=
+                            '<div class="col">' +
+                            '<div class="form-check badge badge-dot text-left">' +
+                            '<label class="form-check-label"><b>'+json_data[key]['name']+'</b></label><br class="mb-1">';
+                            if(json_data[key]['status']){
+                                div_data += '<i class="bg-success"></i>' +
+                                    '<span class="status">Present</span>';
+                            } else{
+                                div_data += '<i class="bg-danger"></i>' +
+                                    '<span class="status">Absent</span>';
+                            }
+                            div_data += '</div>'+'</div><hr class="my-1">';
+                    }
+                    div_data += '</div></div>';
+                    $('#student_data').html(div_data);
+                }
+
+            })
+            .fail(function (){
+                alert('Error filter student')
+            })
+        })
+    })
+</script>
+{% endblock custom_js %}
