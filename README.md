@@ -2,7 +2,7 @@
 Student Management System
 ____
 
-Supported with:
+Supported with
 - Python
 - HTML
 - CSS
